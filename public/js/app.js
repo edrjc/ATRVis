@@ -1,28 +1,28 @@
 var ATRVis = function(){
-	// data
-	this.atrvis_data = null;
-	this.labeling_requests_data = null;
-	this.stopwords_data = null;
-	this.vocab_distribution_data = null;
-	this.disc_features_data = null;
-	this.reply_chain_data = null;
-	this.hashtag_deb_sim_data = null;
+    // data
+    this.atrvis_data = null;
+    this.labeling_requests_data = null;
+    this.stopwords_data = null;
+    this.vocab_distribution_data = null;
+    this.disc_features_data = null;
+    this.reply_chain_data = null;
+    this.hashtag_deb_sim_data = null;
 
-	// data for visualization
-	this.data_for_vis_queue = [];
+    // data for visualization
+    this.data_for_vis_queue = [];
     this.data_for_vis_queue_hash = {};
     this.data_for_vis_queue_hash2 = {};
-	this.max_for_vis = 150; //plus labeling requests...
+    this.max_for_vis = 150; //plus labeling requests...
 
-	// for labeling request use
-	this.max_by_type = 15;
-	this.labeling_request_queue = [];
-	this.labeling_request_curr = 0;
-	this.data_to_label = null;
-	this.pgX = 0;
-	this.pgY = 0;
-	this.class_selected = [];
-	this.labeling_count = 0;
+    // for labeling request use
+    this.max_by_type = 15;
+    this.labeling_request_queue = [];
+    this.labeling_request_curr = 0;
+    this.data_to_label = null;
+    this.pgX = 0;
+    this.pgY = 0;
+    this.class_selected = [];
+    this.labeling_count = 0;
 
     // for ring visualization
     this.data_for_bundle = null;
@@ -45,25 +45,25 @@ var ATRVis = function(){
     this.data_for_similarity_hd = null;
     this.new_data_similarity_hd = null;
 
-	// statistics
-	this.retrieved_tweets_count = 0;
-	this.retrieved_tweets_before_count = 0;
+    // statistics
+    this.retrieved_tweets_count = 0;
+    this.retrieved_tweets_before_count = 0;
     this.total_iter = 0;
 
-	// debates and examples
-	this.debates = {};
-	this.classes_name = null;
-	this.classes_color = {};
+    // debates and examples
+    this.debates = {};
+    this.classes_name = null;
+    this.classes_color = {};
 
-	// debate colors
-	this.colorScale = d3.scale.category20();
-	// [border-width=2, border-bottom-width=3, border-left-width=2, border-right-width=2, border-top-width=2]
-	this.classes_style = ["2px", "1px", "15px", "1px", "1px"];
-	// default colors
-	this.color1 = "#DDD";
-	this.color2 = "#F5F5F5";
-	this.color3 = "#999999";
-	this.color4 = "#BCBCBC";
+    // debate colors
+    this.colorScale = d3.scale.category20();
+    // [border-width=2, border-bottom-width=3, border-left-width=2, border-right-width=2, border-top-width=2]
+    this.classes_style = ["2px", "1px", "15px", "1px", "1px"];
+    // default colors
+    this.color1 = "#DDD";
+    this.color2 = "#F5F5F5";
+    this.color3 = "#999999";
+    this.color4 = "#BCBCBC";
 
     // for vocabulary distribution use
     this.keyword_threshold = 1.0;
@@ -139,34 +139,34 @@ arrow_tooltip.append("div")
 
 //load of static data
 ATRVis.prototype.load_data = function(tds,lr,stp,vd,df,rc,hds){
-	var _this = this;
-	// tweets and debates score
-	$.getJSON(tds, function(data){
+    var _this = this;
+    // tweets and debates score
+    $.getJSON(tds, function(data){
         _this.atrvis_data = data;
     })
     // labeling requests
-	$.getJSON(lr, function(data){
-		_this.labeling_requests_data = data;
-	});
-	// stopwords
-	$.getJSON(stp, function(data){
-		_this.stopwords_data = data;
-	});
-	// vocabulary distribution
-	$.getJSON(vd, function(data){
-		_this.vocab_distribution_data = data.VocabList;
-	});
-	// discriminative features
-	$.getJSON(df, function(data){
-		_this.disc_features_data = data;
-	});
-	// reply chain
-	$.getJSON(rc, function(root){
-		_this.reply_chain_data = root;
-	});
-	// hashtag-debate similarity
-	$.getJSON(hds, function(data){
-		_this.hashtag_deb_sim_data = data;
+    $.getJSON(lr, function(data){
+        _this.labeling_requests_data = data;
+    });
+    // stopwords
+    $.getJSON(stp, function(data){
+        _this.stopwords_data = data;
+    });
+    // vocabulary distribution
+    $.getJSON(vd, function(data){
+        _this.vocab_distribution_data = data.VocabList;
+    });
+    // discriminative features
+    $.getJSON(df, function(data){
+        _this.disc_features_data = data;
+    });
+    // reply chain
+    $.getJSON(rc, function(root){
+        _this.reply_chain_data = root;
+    });
+    // hashtag-debate similarity
+    $.getJSON(hds, function(data){
+        _this.hashtag_deb_sim_data = data;
 
         // letting the similarity-hd data in the same format as debates_data
         for(var i in _this.hashtag_deb_sim_data.HashTags){
@@ -238,13 +238,13 @@ ATRVis.prototype.load_data = function(tds,lr,stp,vd,df,rc,hds){
                 "color": "white",
                 "text-shadow": "-1px 0 black, 0 1px black, 1px 0 black, 0 -1px black"
             }).text(d3.selectAll(".similarity-hd-span")[0].length+" HASHTAGS");
-	});
+    });
 };
 
 // create list of debates and prepare data for visualizations/requests
 ATRVis.prototype.process_atrvis_lr = function(){
 
-	// for statistics
+    // for statistics
     for(var i in this.atrvis_data.dataset){
         if(this.atrvis_data.dataset[i].true_label != "non-retrieved")
             this.retrieved_tweets_count = this.retrieved_tweets_count + 1;
@@ -253,7 +253,7 @@ ATRVis.prototype.process_atrvis_lr = function(){
     if(this.retrieved_tweets_before_count == 0)
         this.retrieved_tweets_before_count = this.retrieved_tweets_count;
 
-   	// list of debates
+    // list of debates
     for(var i in this.atrvis_data.dataset[0].scores){
         this.debates[this.atrvis_data.dataset[0].scores[i].debate] = [];
     }
@@ -316,7 +316,7 @@ ATRVis.prototype.process_atrvis_lr = function(){
     }
 
     // show list of debates
-	this.update_debate_examples();
+    this.update_debate_examples();
 
     var count_classes = 1;
     for(var key in this.debates){
@@ -504,7 +504,7 @@ ATRVis.prototype.labeling_request = function(){
         d3.select(".col-xs-4 div.request-area div.labeling-request blockquote")
             .append("b").attr("class","twitter-info").text("— "+this.data_to_label.fullname+" (@"+this.data_to_label.username+") "+this.data_to_label.created_at);
 
-       	d3.select(".col-xs-4 div.request-area div.labeling-request blockquote")
+        d3.select(".col-xs-4 div.request-area div.labeling-request blockquote")
             .append("p").attr("dir","rtl").append("strong").style({
                 "border-style": "outset",
                 "border-width": "1px"
@@ -719,7 +719,7 @@ ATRVis.prototype.drag_for_labeling_request = function(){
 ATRVis.prototype.check_boundaries = function(el){
     // div list of class boundaries
     var ltop = Number($('.list-group.debates').offset().top),
-    	lleft = Number($('.list-group.debates').offset().left);
+        lleft = Number($('.list-group.debates').offset().left);
 
     // div list of class limits
     var ltop_limit = ltop + Number(d3.select(".list-group.debates").style("height").split("px")[0]),
@@ -785,7 +785,7 @@ ATRVis.prototype.check_boundaries = function(el){
 }
 
 ATRVis.prototype.clearselection = function(){
-	var _this = this;
+    var _this = this;
     d3.select(".list-group.debates").selectAll(".list-group-item").each(function(d,i){
         d3.select(this).style({
                 "border-width": _this.classes_style[0],
@@ -1774,7 +1774,7 @@ ATRVis.prototype.resize = function(debates_data_flag, ids, i, rc){
         d3.select("svg.bar-chart").remove();
         bar_width = d3.select(".request-area").style("width").split("px")[0];
     
-        this.draw_bar_chart(bar_width, bar_height, this.data_for_chart);
+        draw_bar_chart(bar_width, bar_height, this.data_for_chart);
     }
 
     if(d3.select("svg.bundle") != null){
@@ -1960,27 +1960,30 @@ d3.select(".btn.btn-primary.shd").on('click', function(d){
 
 //================================= Main
 var ATR = new ATRVis();
+
+var data = ["Brazilian","Canadian"]
+
 ATR.load_data(
-	'./data/ATR-VisBR.json',
-	'./data/labelingRequestsBR.json',
-	'./data/new_stopBR.txt',
-	'./data/VocabDistributionBR.json',
-	'./data/dktBR.json',
-	'./data/reply-chainBR.json',
-	'./data/HashTagDebateSimBR.json'
+    './data/'+data[1]+'/ATR-Vis.json',
+    './data/'+data[1]+'/labelingRequests.json',
+    './data/'+data[1]+'/new_stop.txt',
+    './data/'+data[1]+'/VocabDistribution.json',
+    './data/'+data[1]+'/dkt.json',
+    './data/'+data[1]+'/reply-chain.json',
+    './data/'+data[1]+'/HashTagDebateSim.json'
 );
 
 // wait load of all data
 $(function() {
   var interval = setInterval(function(){
     if(ATR.atrvis_data && ATR.labeling_requests_data && ATR.stopwords_data && ATR.vocab_distribution_data &&
-    	ATR.disc_features_data && ATR.reply_chain_data && ATR.hashtag_deb_sim_data){
-    	
-    	console.log("Data loaded!");
-    	clearInterval(interval);
+        ATR.disc_features_data && ATR.reply_chain_data && ATR.hashtag_deb_sim_data){
+        
+        console.log("Data loaded!");
+        clearInterval(interval);
 
         // remove loading symbol
-    	d3.select(".btn.btn-lg.btn").remove();
+        d3.select(".btn.btn-lg.btn").remove();
 
         // breadcrumb operations
         $(window).scroll(function (event){
@@ -2004,10 +2007,10 @@ $(function() {
         d3.select(".pagination.list-inline.iter li#apply").on('click', ATR.apply)
 
         // inicialize everything
-    	ATR.process_atrvis_lr();
-    	ATR.set_classes_name_and_color();
-    	ATR.labeling_request();
-    	ATR.drag_for_labeling_request();
+        ATR.process_atrvis_lr();
+        ATR.set_classes_name_and_color();
+        ATR.labeling_request();
+        ATR.drag_for_labeling_request();
         ATR.update_bars();
 
         d3.select(".list-group.debates").selectAll(".list-group-item").on("click", function(d,i){
@@ -2041,6 +2044,8 @@ $(function() {
 
         // hashtag-debate similarity
         ATR.draw_similarity_hd();
+    }else{
+        console.log("Loading data...");
     }
   }, 500);
 });

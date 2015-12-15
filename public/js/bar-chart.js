@@ -35,7 +35,6 @@ function draw_bar_chart(bwidth, bheight, data_for_chart){
     var new_data = [];
     var keys = Object.keys(ATR.debates);
     for(var key in keys){
-        console.log(keys[key]);
         new_data.push({"debate":keys[key],"val":0.0});
     }
 

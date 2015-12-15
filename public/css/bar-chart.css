@@ -1,0 +1,14 @@
+.axis path,
+.axis line {
+  fill: none;
+  stroke: #000;
+  shape-rendering: crispEdges;
+}
+
+.bar:hover {
+  opacity: 0.5;
+}
+
+.x.axis path {
+  display: none;
+}

@@ -1,0 +1,90 @@
+/*main*/
+path.arc {
+  //cursor: move;
+  fill: #fff;
+}
+
+.node-tweet-bundle:hover {
+  fill: black;
+}
+
+.link, .link-fl {
+  fill: none;
+  stroke: #BCBCBC; //1f77b4
+  stroke-opacity: .6;
+  pointer-events: none;
+}
+
+.link.source, .link.target, .link-fl.source, .link-fl.target {
+  stroke-opacity: 1;
+  stroke-width: 2px;
+}
+
+.node.target {
+  fill: gray !important;
+}
+
+.link.source, .link-fl.source {
+  stroke: gray;
+}
+
+.node.source {
+  fill: gray;
+}
+
+.link.target, .link-fl.target {
+  stroke: gray;
+}
+/**/
+
+text.twitter-info-bundle {
+  font-family: "Helvetica Neue", Roboto, "Segoe UI", Calibri, sans-serif;
+  font-size: 12px;
+  line-height: 16px;
+  color: #BCBCBC;
+}
+
+a:link, a:visited {
+  color: #777;
+  text-decoration: none;
+}
+
+a:hover {
+  color: #666;
+}
+
+.invert {
+  background: #1f1f1f;
+  color: #dcdccc;
+}
+
+.invert h2, .invert h3 {
+  color: #7f9f7f;
+}
+
+.string, .regexp {
+  color: #f39;
+}
+
+.keyword {
+  color: #00c;
+}
+
+.comment {
+  color: #777;
+  font-style: oblique;
+}
+
+.number {
+  color: #369;
+}
+
+.class, .special {
+  color: #1181B8;
+}
+
+body > svg {
+  position: absolute;
+  top: -80px;
+  left: -160px;
+}

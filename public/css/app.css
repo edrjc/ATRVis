@@ -1,0 +1,303 @@
+/* general styles */
+html, body {
+  height: 100%;
+  width: 100%;
+}
+
+/* padded section */
+.pad-section {
+  padding: 50px 0;
+}
+
+.space {
+	height: 50px;
+	width: 100%;
+}
+
+/* additional sections */
+#home {
+	display: table;
+	height: 100%;
+	position: relative;
+	width: 100%;
+	-webkit-background-size: cover;
+	-moz-background-size: cover;
+	-o-background-size: cover;
+	background-size: cover;
+}
+
+#second-section {
+	display: table;
+	height: 100%;
+	position: relative;
+	width: 100%;
+	-webkit-background-size: cover;
+	-moz-background-size: cover;
+	-o-background-size: cover;
+	background-size: cover;
+}
+
+/*http://stackoverflow.com/questions/20270438/breadcrumb-into-a-navbar-in-bootstrap-3-0-2*/
+.nav .breadcrumb {
+    margin: 0 7px;
+}
+@media (min-width: 768px) {
+    .nav .breadcrumb {
+        float: left;
+        margin: 7px 10px;
+    }
+}
+
+.breadcrumb>.active {
+	font-weight: 700;
+}
+
+div.request-area div.panel-body {
+	position:relative;
+}
+
+div.panel-body.debates {
+	/*max-height: 100%;*/
+	/*overflow-y: scroll;*/
+}
+
+div.panel-body.retrieved-tweets {
+	/*max-height: 100px;*/
+	overflow-y: scroll;
+}
+
+div.panel-body.df {
+	max-height: 420px;
+	overflow-y: scroll;
+}
+
+div.panel-body.rp-hd-info {
+	max-height: 420px;
+	overflow-y: scroll;
+}
+
+div.panel-body.similarity-hd-list {
+	max-height: 100px;
+	overflow-y: scroll;
+}
+
+body {
+	background-color: #FCFCFA;
+}
+
+div.request-area {
+	float: left;
+	width: 100%;
+}
+
+div.info-area {
+	/*background-color: #ddd;*/
+}
+
+div.info-area-features {
+	float: left;
+	width: 100px;
+	background-color: black;
+}
+
+div.info-area-tweets {
+	float: left;
+	width: 100%;
+}
+
+div.col-xs-6.col-xs-offset-1 {
+	position: relative;
+}
+
+div.col-xs-3.info-area {
+	position: relative;
+}
+
+div.panel.panel-default.chart {
+	z-index: -1;
+  float: left;
+  width: 100%;
+}
+div.panel-body.chart {
+	z-index: -1;
+}
+
+div.col-xs-4 {
+	z-index: 1;
+	position: relative;
+}
+
+div.labeling-request {
+	z-index: 2;
+}
+
+h3.panel-title {
+	text-align: center;
+}
+
+p.twitter-info {
+  font-family: "Helvetica Neue", Roboto, "Segoe UI", Calibri, sans-serif;
+  font-size: 12px;
+  font-weight: bold;
+  line-height: 16px;
+}
+
+/*********************************DiscriminativeKeyTerms2Classes*********************************/
+
+/*http://stackoverflow.com/questions/802175/truncating-long-strings-with-css-feasible-yet*/
+span.discriminative-span {
+	display: inline-block;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    -o-text-overflow: ellipsis;
+    padding-left: 4px;
+    padding-right: 4px;
+    margin: 2px;
+    line-height: 16px;
+  	font-weight: normal;
+  	font-family: "Helvetica Neue", Roboto, "Segoe UI", Calibri, sans-serif;
+    /*color: white;
+    text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;*/
+}
+
+span.similarity-hd-span {
+	display: inline-block;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    -o-text-overflow: ellipsis;
+    padding-left: 4px;
+    padding-right: 4px;
+    margin: 2px;
+    line-height: 16px;
+  	font-weight: normal;
+  	font-family: "Helvetica Neue", Roboto, "Segoe UI", Calibri, sans-serif;
+    /*color: white;
+    text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;*/
+}
+
+.tooltip-inner {
+    border-style: solid;
+    border-color: #DDD;
+    border-width: 2px;
+	padding: 12px;
+	border-radius: 2px;
+	text-align: left;
+	word-wrap: break-word;
+}
+
+.tooltip-inner.arrow {
+	width: 160px;
+}
+
+/* Creates a small triangle extender for the tooltip */
+.new-tooltip:after {
+  box-sizing: border-box;
+  display: inline;
+  font-size: 10px;
+  width: 100%;
+  line-height: 1;
+  color: rgba(0, 0, 0, 0.8);
+  content: "\25BC";
+  position: absolute;
+  text-align: center;
+}
+
+.d3-tip {
+  line-height: 16px;
+  font-weight: normal;
+  font-family: "Helvetica Neue", Roboto, "Segoe UI", Calibri, sans-serif;
+  padding: 12px;
+  background: rgba(0, 0, 0, 0.8);
+  border-radius: 2px;
+  max-width: 468px;
+}
+
+/* Creates a small triangle extender for the tooltip */
+.d3-tip:after {
+  box-sizing: border-box;
+  display: inline;
+  font-size: 10px;
+  width: 100%;
+  line-height: 1;
+  color: rgba(0, 0, 0, 0.8);
+  content: "\25BC";
+  position: absolute;
+  text-align: center;
+}
+
+/* Style northward tooltips differently */
+.d3-tip.n:after {
+  margin: -1px 0 0 0;
+  top: 100%;
+  left: 0;
+}
+
+.btn.btn-lg.btn, .done{
+  text-align: center;
+	margin: auto;
+	width: 100%;
+  height: 100%;
+	background-color: white;
+}
+
+.glyphicon-refresh-animate {
+    -animation: spin .7s infinite linear;
+    -webkit-animation: spin2 .7s infinite linear;
+}
+
+@-webkit-keyframes spin2 {
+    from { -webkit-transform: rotate(0deg);}
+    to { -webkit-transform: rotate(360deg);}
+}
+
+@keyframes spin {
+    from { transform: scale(1) rotate(0deg);}
+    to { transform: scale(1) rotate(360deg);}
+}
+
+.navbar-header.history {
+  border-left: 1px solid #333;
+}
+
+.navbar-brand.history {
+  margin-left: 10px;
+}
+
+.pagination.list-inline.iter {
+  margin: 7px;
+}
+
+li#iterc a {
+  pointer-events: none;
+  cursor: default;
+  color: gray;
+}
+
+li#iters a {
+  pointer-events: none;
+  cursor: default;
+  color: white;
+}
+
+.navbar-header.retrieved-tweets {
+  border-left: 1px solid #333;
+}
+
+.navbar-brand.retrieved-tweets {
+  margin-left: 10px;
+}
+
+.retrieval-info {
+  float: left;
+  margin: 7px 10px;
+  padding: 8px 15px;
+  background-color: #f5f5f5;
+  border-radius: 4px;
+  color: gray;
+}
+
+.form-group label{
+  width:70px;
+}

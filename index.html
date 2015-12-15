@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+        <title>Labeling</title>
+        <link href="./public/css/bootstrap.min.css" rel="stylesheet">
+        <link href="./public/css/dashboard.css" rel="stylesheet">
+        <link href="./public/css/embedded-tweets.css" rel="stylesheet">
+        <link href="./public/css/bar-chart.css" rel="stylesheet">
+        <link href="./public/css/force-layout.css" rel="stylesheet">
+        <link href="./public/css/bundle.css" rel="stylesheet">
+        <link href="./public/css/reply-chain.css" rel="stylesheet">
+        <link href="./public/css/app.css" rel="stylesheet">
+    </head>
+
+    <body>
+        <nav class="navbar navbar-inverse navbar-fixed-top">
+          <div class="container">
+            <div class="navbar-header">
+              <a class="navbar-brand" href="#">ATR-Vis</a>
+            </div>
+            <ul class="nav navbar-nav navbar-left">
+              <ul class="breadcrumb list-inline">
+                <li class="active" id="bcli0">Assigment</li>
+                <li id="bcli1"><a>More</a></li>
+              </ul>
+            </ul>
+
+            <div class="navbar-header history">
+              <a class="navbar-brand history" href="#">HISTORY (0)</a>
+            </div>
+            <ul class="nav navbar-nav navbar-left">
+                <ul class="pagination list-inline iter">
+
+                    <li id="iterp"><a href="#">«</a></li>
+                    <li id="iterc"><a href="#">0</a></li>
+                    <li id="itern"><a href="#">»</a></li>
+                    <li id="iters"><a href="#"> | </a></li>
+                    <li id="apply"><a href="#"> APPLY </a></li>
+                </ul>
+            </ul>
+
+            <div class="navbar-header retrieved-tweets">
+              <a class="navbar-brand retrieved-tweets" href="#">RETRIEVED TWEETS</a>
+            </div>
+            <ul class="nav navbar-nav navbar-left">
+                <div class="retrieval-info">
+                    0
+                </div>
+            </ul>
+
+          </div>
+        </nav>
+        <div id="home" class="home">
+            <div class="space">
+            </div>
+            <div class="container-fluid">
+                <div class="row-xs-12">
+                    <!-- left content -->
+                    <div class="col-xs-4 col-xs-offset-1">
+
+                        <!-- Labeling request -->
+
+                        <!-- tweet: dynamic content -->
+
+                        <div class="request-area">
+                            <div class="panel panel-default">
+                                <div class="panel-heading">
+                                    <h3 class="panel-title"><strong>ASSIGNMENT</strong><br />labeling request</h3>
+                                </div>
+                                <div class="panel-body">
+
+                                    <button class="btn btn-lg btn"><span class="glyphicon glyphicon-refresh glyphicon-refresh-animate">
+
+                                </div>
+                            </div>
+                        </div>
+                        <div class="panel panel-default chart">
+                            <div class="panel panel-default">
+                            <div class="panel-heading no-labeling">
+                                    <h3 class="panel-title"><strong>CONTEXT</strong></h3>
+                                </div>
+                            <div class=" panel-body">
+                            <ul class="nav nav-tabs">
+                                <li class="active" id="lii1"><a data-toggle="tab" href="#li1"><strong>KEYWORD DISTRIBUTION</strong><br />over different debates</a></li>
+                                <li id="lii2"><a data-toggle="tab" href="#li2"><strong>FORCE LAYOUT</strong>
+                                <br />of all tweets</a></li>
+                                <li id="lii3"><a data-toggle="tab" href="#li3"><strong>RING VISUALIZATION</strong>
+                                <br />of all tweets</a></li>
+                            </ul>
+
+                            <div class="tab-content">
+                              <div id="li1" class="tab-pane fade in active">
+                                    <div class="panel-body chart">
+
+                                    <!-- chart: dynamic content -->
+
+                                    </div>
+                              </div>
+                              <div id="li2" class="tab-pane fade">
+                                    <button type="button" class="btn btn-default" aria-label="Left Align" id="lr-force-layout-button">
+                                      <span class="glyphicon glyphicon-question-sign" aria-hidden="true" title="Highlight Labeling Request"></span>
+                                    </button>
+                                    <button type="button" class="btn btn-default" aria-label="Left Align" id="fe-force-layout-button">
+                                      <span class="glyphicon glyphicon-search" aria-hidden="true"></span>
+                                    </button>
+                                    <div class="panel-body force-layout">
+
+                                    <!-- force-layout: dynamic content -->
+
+                                    </div>
+                                    <form class="form-inline">
+                                      <div class="form-group">
+                                        <label for="exampleInputName2">Threshold</label>
+                                        <input class="form-control threshold" id="t1" type="range" min="0" max="500" value="50">
+                                        <span class="form-control threshold-value"></span>
+                                      </div>
+                                    </form>
+                              </div>
+                              <div id="li3" class="tab-pane fade">
+                                    <button type="button" class="btn btn-default" aria-label="Left Align" id="lr-bundle-button">
+                                      <span class="glyphicon glyphicon-question-sign" aria-hidden="true" title="Highlight Labeling Request"></span>
+                                    </button>
+                                    <button type="button" class="btn btn-default" aria-label="Left Align" id="fe-bundle-button">
+                                      <span class="glyphicon glyphicon-search" aria-hidden="true"></span>
+                                    </button>
+                                    <div class="panel-body bundle">
+                                        
+                                    <!-- bundle: dynamic content -->
+
+                                    </div>
+                                    <form class="form-inline">
+                                      <div class="form-group">
+                                        <label for="exampleInputName1">Tension</label>
+                                        <input class="form-control bundle-tension" type="range" min="0" max="100" value="85">
+                                      </div>
+                                    </form>
+                                    <form class="form-inline">
+                                      <div class="form-group">
+                                        <label for="exampleInputName2">Threshold</label>
+                                        <input class="form-control threshold" id="t2" type="range" min="0" max="500" value="50">
+                                        <span class="form-control threshold-value"></span>
+                                      </div>
+                                    </form>
+                              </div>
+                            </div>
+                            </div>
+                            </div>
+                            <div class="panel-footer"></div>
+                        </div>
+                    </div>
+                    <!-- mid content -->
+                    <div class="col-xs-3">
+                        <!-- Classes list -->
+                        <div class="classes-list">
+                            <div class="panel panel-default debates">
+                                <div class="panel-heading no-labeling">
+                                    <h3 class="panel-title"><strong>DEBATES</strong></h3>
+                                </div>
+                                <div class="panel-body debates">
+                                    <ul class="list-group debates">
+
+                                    <!-- list of debates: dynamic content -->
+
+                                    </ul>
+                                </div>
+                                <div class="panel-footer"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- right content -->
+                    <div class="col-xs-3 info-area">
+                        <div class="panel panel-default">
+                            <div class="panel-heading no-labeling">
+                                <h3 class="panel-title"><strong>DEBATE INFO</strong></h3>
+                            </div>
+                                    <div class="panel-body debate-info">
+                                        <div class="panel panel-default discriminative-features">
+                                            <div class="panel-heading no-labeling">
+                                                <h3 class="panel-title"><strong>DISCRIMINATIVE FEATURES</strong></h3>
+                                            </div>
+                                                    <div class="panel-body df">
+
+                                                    <!-- discriminative features: dynamic content -->
+
+                                                    </div>
+                                        </div>
+                                        <div class="panel panel-default retrieved-tweets">
+                                            <div class="panel-heading no-labeling">
+                                                <h3 class="panel-title"><strong>RETRIEVED TWEETS</strong></h3>
+                                            </div>
+                                                <div class="panel-body retrieved-tweets">
+                                                    <ul class="list-group retrieved-tweets">
+
+                                                    <!-- retrieved tweets: dynamic content -->
+
+                                                    </ul>
+                                                </div>
+                                        </div>
+                                    </div>
+                            <div class="panel-footer"></div>
+                        </div>
+                    </div>
+                </div>
+            </div><!-- /.container -->
+        </div><!-- /.home -->
+        <hr>
+        <div id="second-section" class="pad-section">
+            <div class="space">
+            </div>
+            <div class="container-fluid">
+                <div class="row-xs-12">
+                    <div class="col-xs-4 col-xs-offset-1">
+                        <!-- Reply tree -->
+                        <div class="reply-chain">
+                            <div class="panel panel-default reply-chain">
+                                <div class="panel-heading no-labeling">
+                                    <h3 class="panel-title"><strong>REPLY TREE (and their association)</strong></h3>
+                                </div>
+                                <div class="panel-body reply-chain">
+
+                                    <!-- reply tree: dynamic content -->
+
+                                </div>
+                                <div class="panel-footer"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xs-3">
+                        <!-- Similarity hashtag-debate -->
+                        <div class="similarity-hd">
+                            <div class="panel panel-default similarity-hd">
+                                <div class="panel-heading no-labeling">
+                                    <h3 class="panel-title"><strong>SIMILARITY HASHTAG-DEBATE</strong></h3>
+                                </div>
+                                <div class="panel-body similarity-hd">
+                                    <div class="panel-body similarity-hd-list">
+
+                                    <!-- dynamic content -->
+
+                                    </div>
+                                    <hr>
+
+                                    <!-- similarity hashtag-debate: dynamic content -->
+
+                                </div>
+                                <div class="panel-footer"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xs-3">
+                        <!-- rp-hd Info -->
+                        <div class="rp-hd-info">
+                            <div class="panel panel-default rp-hd-info">
+                                <div class="panel-heading no-labeling">
+                                    <h3 class="panel-title"><strong>RETRIEVED TWEETS</strong></h3>
+                                </div>
+                                <div class="panel-body rp-hd-info">
+
+                                    <ul class="list-group rp-hd-info">
+
+                                    <!-- rp-hd info: dynamic content -->
+
+                                    </ul>
+                                </div>
+                                <div class="panel-footer"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- <hr>
+        <div id="test-section" class="pad-section">
+             <div class="container-fluid">
+                <div class="row-xs-12">
+                    <div class="col-xs-4 col-xs-offset-1">
+                        
+                        <div class="teste">
+                            <div class="panel panel-default teste">
+                                <div class="panel-heading no-labeling">
+                                    <h3 class="panel-title"><strong>testes</strong></h3>
+                                </div>
+                                <div class="panel-body teste">
+
+                                    
+
+                                </div>
+                                <div class="panel-footer"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div> -->
+
+        <!-- Model for reply chain -->
+        <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+          <div class="modal-dialog" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="No"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">Labeling Request</h4>
+              </div>
+              <div class="modal-body">
+                Label whole reply chain?
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">No</button>
+                <button type="button" class="btn btn-primary rc" data-dismiss="modal">Yes</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Model for similarity hashtag-debate -->
+        <div class="modal fade" id="myModal2" tabindex="-1" role="dialog" aria-labelledby="myModalLabel2">
+          <div class="modal-dialog" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="No"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel2">Assigning Hashtag to Debate</h4>
+              </div>
+              <div class="modal-body">
+                Also associate tweets?
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">No</button>
+                <button type="button" class="btn btn-primary shd" data-dismiss="modal">Yes</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Loanding js by last to fast load the page -->
+        <script src="./public/js/jquery-1.11.3.min.js"></script>   
+        <script src="./public/js/bootstrap.min.js"></script>
+        <script src="./public/js/d3.min.js"></script>
+        <script src="./public/js/reply-chain.js"></script>
+        <script src="./public/js/app.js"></script>
+        <script src="./public/js/similarity-hd.js"></script>
+        <script src="./public/js/bar-chart.js"></script>
+        <script src="./public/js/force-layout.js"></script>
+        <script src="./public/js/bundle.js"></script>
+        <script src="./public/js/packages.js"></script>
+        <script src="./public/js/fisheye.js"></script>
+        <script src="./public/js/shuffle.js"></script>
+    </body>

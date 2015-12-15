@@ -32,14 +32,14 @@ function draw_bar_chart(bwidth, bheight, data_for_chart){
       .append("g")
         .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
-    var new_data = [
-        {"debate":"ajuste fiscal","val":0.0}
-        ,{"debate":"previdência social","val":0.0}
-        ,{"debate":"direitos do trabalhador","val":0.0}
-        ,{"debate":"bndes","val":0.0}
-        ,{"debate":"reforma política","val":0.0}
-        ,{"debate":"none","val":0.0}
-    ]
+    console.log(ATR.debates);
+
+    var new_data = [];
+    var keys = Object.keys(ATR.debates);
+    for(var key in keys){
+        console.log(keys[key]);
+        new_data.push({"debate":keys[key],"val":0.0});
+    }
 
     if(data_for_chart != undefined){
         data = data_for_chart.scores;

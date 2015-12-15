@@ -32,8 +32,6 @@ function draw_bar_chart(bwidth, bheight, data_for_chart){
       .append("g")
         .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
-    console.log(ATR.debates);
-
     var new_data = [];
     var keys = Object.keys(ATR.debates);
     for(var key in keys){

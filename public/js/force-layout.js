@@ -47,9 +47,7 @@ function force_layout(bwidth, bheight){
     		.selectAll(".link-fl")
         	.data(ATR.data_for_force_layout.links)
         	.enter().append("line")
-            //.attr("class", function(d) { return "link source-" + d.source.key + " target-" + d.target.key; })
             .attr("class", function(d) { return "link-fl source-" + d.source.index + " target-" + d.target.index })
-        	//.attr("class", "link-fl")
         	.style("stroke-width", function(d) { return Math.sqrt(d.value); });
 
         container.append("g")
@@ -128,7 +126,7 @@ function force_layout(bwidth, bheight){
             var keys = Object.keys(ATR.data_for_vis_queue_hash2);
             for(var i in keys){
                 if(ATR.data_for_vis_queue_hash2[keys[i]] == d.index){
-                    ATR.change_labeling_request(Number(keys[i]));
+                    ATR.change_labeling_request(Number(keys[i]), "force_layout");
                 }
             }
         }
@@ -139,16 +137,12 @@ function force_layout(bwidth, bheight){
             }
             // deselect node and all conections
             if(d3.select(el).attr("selected") == "true"){
-                //d3.select(el.parentNode).attr("selected", false);
                 d3.select(el).attr("selected", false);
                 d3.select(el).style("opacity", 0.3);
                 d3.select(el).attr("count", 0);
-                //d3.select(el.parentNode).attr("count", 0);
                 clean_path(el, d, true);
-                //d3.select(el.parentNode).attr("manualy_selected", false);
                 d3.select(el).attr("manualy_selected", false);
             }else{
-                //d3.select(el.parentNode).attr("manualy_selected", true);
                 d3.select(el).attr("manualy_selected", true);
                 highlight_path(el, d, true);
                 node.each(function(d,i){
@@ -294,20 +288,21 @@ function force_layout(bwidth, bheight){
         }
 
         function arrow(){
-            if(ATR.arrow_flag){
-                var pos = [(d3.select("#node-"+ATR.data_for_vis_queue_hash2[String(ATR.labeling_request_curr)])[0][0].getBoundingClientRect().left + $(window)['scrollLeft']()), d3.select("#node-"+ATR.data_for_vis_queue_hash2[String(ATR.labeling_request_curr)])[0][0].getBoundingClientRect().bottom + $(window)['scrollTop']()];
-                arrow_tooltip.select(".tooltip-inner.arrow").style("visibility", "visible")
-                //arrow_tooltip.select(".tooltip-inner.arrow").append("span").html("Labeling Request")
-                arrow_tooltip.select(".tooltip-inner.arrow").html('Labeling Request <button type="button" class="close" aria-label="Close"><span aria-hidden="true">×</span></button>')
-                arrow_tooltip.select(".tooltip-inner.arrow").style("top", (pos[1]-arrow_tooltip.select(".tooltip-inner.arrow").style("height").split("px")[0]-20)+"px").style("left",(pos[0]-arrow_tooltip.select(".tooltip-inner.arrow").style("width").split("px")[0]/2)+"px");
-                arrow_tooltip.select(".new-tooltip.arrow").style("visibility", "visible")
-                arrow_tooltip.select(".new-tooltip.arrow").style("top", (pos[1]-arrow_tooltip.select(".new-tooltip.arrow").style("height").split("px")[0]-20)+"px").style("left",(pos[0]-arrow_tooltip.select(".new-tooltip.arrow").style("width").split("px")[0]/2)+"px");
+            if(!ATR.done_execution){
+                if(ATR.arrow_flag){
+                    var pos = [(d3.select("#node-"+ATR.data_for_vis_queue_hash2[String(ATR.labeling_request_curr)])[0][0].getBoundingClientRect().left + $(window)['scrollLeft']()), d3.select("#node-"+ATR.data_for_vis_queue_hash2[String(ATR.labeling_request_curr)])[0][0].getBoundingClientRect().bottom + $(window)['scrollTop']()];
+                    arrow_tooltip.select(".tooltip-inner.arrow").style("visibility", "visible")
+                    arrow_tooltip.select(".tooltip-inner.arrow").html('Labeling Request <button type="button" class="close" aria-label="Close"><span aria-hidden="true">×</span></button>')
+                    arrow_tooltip.select(".tooltip-inner.arrow").style("top", (pos[1]-arrow_tooltip.select(".tooltip-inner.arrow").style("height").split("px")[0]-20)+"px").style("left",(pos[0]-arrow_tooltip.select(".tooltip-inner.arrow").style("width").split("px")[0]/2)+"px");
+                    arrow_tooltip.select(".new-tooltip.arrow").style("visibility", "visible")
+                    arrow_tooltip.select(".new-tooltip.arrow").style("top", (pos[1]-arrow_tooltip.select(".new-tooltip.arrow").style("height").split("px")[0]-20)+"px").style("left",(pos[0]-arrow_tooltip.select(".new-tooltip.arrow").style("width").split("px")[0]/2)+"px");
 
-                arrow_tooltip.select(".tooltip-inner.arrow button").on('click', function(d){
-                    ATR.arrow_flag = !ATR.arrow_flag;
-                    arrow_tooltip.select(".new-tooltip.arrow").style("visibility", "hidden")
-                    arrow_tooltip.select(".tooltip-inner.arrow").style("visibility", "hidden")
-                })
+                    arrow_tooltip.select(".tooltip-inner.arrow button").on('click', function(d){
+                        ATR.arrow_flag = !ATR.arrow_flag;
+                        arrow_tooltip.select(".new-tooltip.arrow").style("visibility", "hidden")
+                        arrow_tooltip.select(".tooltip-inner.arrow").style("visibility", "hidden")
+                    })
+                }
             }
         }
 

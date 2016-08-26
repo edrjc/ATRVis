@@ -180,31 +180,70 @@ function similarity_hd(bwidth, bheight, current_hashtag){
                 }
 
                 // change association
+                // save history
+                ATR.total_iter = ATR.total_iter + 1;
+                ATR.data_history.push({tweets: {}, keywords: {}, disc_features: {}, hashtags: {}, labeling_request_queue_history: []});
+                ATR.copy_lrq_history();
+                var flag = false;
                 for(var k in all_related_tweets){
                     var res = get_tweet_info(Number(all_related_tweets[k][1]));
                     if(Number(res[0]) != i){
-                        ATR.atrvis_data.dataset[Number(all_related_tweets[k][1])].scores[i].val = res[2] + 0.5;
-                        // for video
-                        if(Number(res[0]) == -1){
-                            ATR.retrieved_tweets_count = ATR.retrieved_tweets_count + 1;
-                            d3.select(".retrieval-info").text(ATR.retrieved_tweets_count);
+                        flag = true;
+                        // save history
+                        if(!(Number(all_related_tweets[k][1]) in ATR.twt_id_to_check)){
+                            ATR.twt_id_to_check[Number(all_related_tweets[k][1])] = ATR.atrvis_data.dataset[Number(all_related_tweets[k][1])].true_label;
                         }
+                        var id = ATR.atrvis_data.dataset[Number(all_related_tweets[k][1])].id;
+                        ATR.data_history[ATR.total_iter-1].tweets[id] = {};
+                        ATR.data_history[ATR.total_iter-1].tweets[id].true_label = ATR.atrvis_data.dataset[Number(all_related_tweets[k][1])].true_label;
+                        ATR.data_history[ATR.total_iter-1].tweets[id].prev_deb = ATR.atrvis_data.dataset[Number(all_related_tweets[k][1])].prev_deb;
+                        ATR.data_history[ATR.total_iter-1].tweets[id].status = ATR.atrvis_data.dataset[Number(all_related_tweets[k][1])].status;
+                        ATR.data_history[ATR.total_iter-1].tweets[id].labeling = ATR.atrvis_data.dataset[Number(all_related_tweets[k][1])].labeling;
+                        ATR.data_history[ATR.total_iter-1].tweets[id]["request-type"] = ATR.atrvis_data.dataset[Number(all_related_tweets[k][1])]["request-type"];
+                        ATR.data_history[ATR.total_iter-1].tweets[id].scores = [];
+                        for(var z=0; z<ATR.atrvis_data.dataset[Number(all_related_tweets[k][1])].scores.length; z++){
+                            ATR.data_history[ATR.total_iter-1].tweets[id].scores.push({});
+                            ATR.data_history[ATR.total_iter-1].tweets[id].scores[z].debate = ATR.atrvis_data.dataset[Number(all_related_tweets[k][1])].scores[z].debate;
+                            ATR.data_history[ATR.total_iter-1].tweets[id].scores[z].val = ATR.atrvis_data.dataset[Number(all_related_tweets[k][1])].scores[z].val;
+                        }
+
+                        ATR.atrvis_data.dataset[Number(all_related_tweets[k][1])].scores[i].val = res[2] + 0.5;
+                        if(!(Number(all_related_tweets[k][1]) in ATR.twt_id_to_check)){
+                            ATR.twt_id_to_check[Number(all_related_tweets[k][1])] = ATR.atrvis_data.dataset[Number(all_related_tweets[k][1])].true_label;
+                        }
+                        ATR.atrvis_data.dataset[Number(all_related_tweets[k][1])].prev_deb = ATR.atrvis_data.dataset[Number(all_related_tweets[k][1])].true_label;
                         ATR.atrvis_data.dataset[Number(all_related_tweets[k][1])].true_label = ATR.classes_name[i];
                     }
                 }
 
-                // change similarities
-                var sum = 0.0;
-                for(var k in related_debates){
-                    sum = sum + ATR.new_data_similarity_hd[current_hashtag].debates[related_debates[k]].val;
+                if(current_hashtag in ATR.hd_visited_aux){
+                    ATR.data_history[ATR.total_iter-1].hashtags[current_hashtag] = {};
+                    ATR.data_history[ATR.total_iter-1].hashtags[current_hashtag].debate = ATR.hd_visited_aux[current_hashtag];
+                    ATR.hd_visited_aux[current_hashtag] = ATR.classes_name[i];
+                    ATR.data_history[ATR.total_iter-1].hashtags[current_hashtag].hd_curr = current_hashtag;
+                }else{
+                    ATR.hd_visited_aux[current_hashtag] = ATR.classes_name[i];
+                    ATR.data_history[ATR.total_iter-1].hashtags[current_hashtag] = {};
+                    ATR.data_history[ATR.total_iter-1].hashtags[current_hashtag].debate = "non-assigned";
+                    ATR.data_history[ATR.total_iter-1].hashtags[current_hashtag].hd_curr = current_hashtag;
+                }
+
+                var flag_to_check = false;
+                if(!(current_hashtag in ATR.hashtag_id_to_check)){
+                    ATR.hashtag_id_to_check[current_hashtag] = {};
+                    ATR.hashtag_id_to_check[current_hashtag].scores = [];
+                    flag_to_check = true;
                 }
                 for(var k in ATR.hashtag_deb_sim_data.HashTags[current_hashtag].scores){
-                    ATR.hashtag_deb_sim_data.HashTags[current_hashtag].scores[k].val = 0.0;
+                    //save history
+                    if(flag_to_check){
+                        ATR.hashtag_id_to_check[current_hashtag].scores.push({});
+                        ATR.hashtag_id_to_check[current_hashtag].scores[k].val = ATR.hashtag_deb_sim_data.HashTags[current_hashtag].scores[k].val;
+                    }
                 }
-                ATR.hashtag_deb_sim_data.HashTags[current_hashtag].scores[i].val = sum;
 
                 // update views
-                // - getting ids
+                // - getting ids for reply chain
                 var ids = [];
                 for(var k in all_related_tweets){
                     ids.push(ATR.atrvis_data.dataset[all_related_tweets[k][1]].id);
@@ -214,20 +253,43 @@ function similarity_hd(bwidth, bheight, current_hashtag){
                 var old_deb = -1;
                 var keys = Object.keys(ATR.disc_features_data);
                 var hashtag = "#"+ATR.hashtag_deb_sim_data.HashTags[current_hashtag].tagStr;
+                var flag2 = false;
+                var score = 0.0;
+                var prev_deb = "";
                 for(var k in keys){
                     for(var l in ATR.disc_features_data[keys[k]]){
                         if(ATR.disc_features_data[keys[k]][l][hashtag] != undefined){
                             old_deb = keys[k];
+                            score = ATR.disc_features_data[keys[k]][l][hashtag];
+                            if(ATR.disc_features_data[keys[k]][l][hashtag]["prev_deb"])
+                                prev_deb = ATR.disc_features_data[keys[k]][l][hashtag]["prev_deb"];
+                            flag2 = true;
                         }
                     }
                 }
-                ATR.update_discriminative_features(hashtag, ATR.classes_name[i], old_deb);
+                if(flag2){
+                    var disc_f = "#"+ATR.hashtag_deb_sim_data.HashTags[current_hashtag].tagStr;
+                    if(!(disc_f in ATR.keyword_id_to_check))
+                        ATR.keyword_id_to_check[disc_f] = old_deb;
+                    ATR.data_history[ATR.total_iter-1].disc_features[disc_f] = {};
+                    ATR.data_history[ATR.total_iter-1].disc_features[disc_f].true_label = old_deb;
+                    ATR.data_history[ATR.total_iter-1].disc_features[disc_f].prev_deb = prev_deb;
+                    ATR.data_history[ATR.total_iter-1].disc_features[disc_f].score = score;
 
-                ATR.resize(true, ids, i);
-                var res = ATR.get_data_to_label_informations();
-                ATR.retrieved_tweets(d3.select("#cl"+(Number(res[0])+1))[0][0], {"classe": res[1]}, Number(res[0]));
-
-                ATR.update_labeling_request();
+                    ATR.update_discriminative_features(hashtag, ATR.classes_name[i], old_deb);
+                }
+                ATR.update_nav_history();
+                // should apply the results at this point
+                $('#myModal2').unbind('hidden.bs.modal');
+                // cleaning hashtag similarity
+                d3.select(".panel-body.similarity-hd-list").selectAll("span").remove();
+                d3.select("svg.similarity-hd").remove();
+                d3.select(".panel.panel-default.similarity-hd div.panel-heading").select("p").remove();
+                ATR.load_hds(false);
+                if(d3.select("#hide-similarity-hd-panel-button").attr("aria-expanded") == "true"){
+                    ATR.draw_similarity_hd(true, undefined);
+                }
+                ATR.update_vis(false, false);
             }else{
                 // find related debates
                 var related_debates = []
@@ -237,39 +299,95 @@ function similarity_hd(bwidth, bheight, current_hashtag){
                     }
                 })
                 // change similarities
-                var sum = 0.0;
-                for(var k in related_debates){
-                    sum = sum + ATR.new_data_similarity_hd[current_hashtag].debates[related_debates[k]].val;
+                ATR.total_iter = ATR.total_iter + 1;
+                ATR.data_history.push({tweets: {}, keywords: {}, disc_features: {}, hashtags: {}, labeling_request_queue_history: []});
+                ATR.copy_lrq_history();
+
+                if(current_hashtag in ATR.hd_visited_aux){
+                    ATR.data_history[ATR.total_iter-1].hashtags[current_hashtag] = {};
+                    ATR.data_history[ATR.total_iter-1].hashtags[current_hashtag].debate = ATR.hd_visited_aux[current_hashtag];
+                    ATR.hd_visited_aux[current_hashtag] = ATR.classes_name[i];
+                    ATR.data_history[ATR.total_iter-1].hashtags[current_hashtag].hd_curr = current_hashtag;
+                }else{
+                    ATR.hd_visited_aux[current_hashtag] = ATR.classes_name[i];
+                    ATR.data_history[ATR.total_iter-1].hashtags[current_hashtag] = {};
+                    ATR.data_history[ATR.total_iter-1].hashtags[current_hashtag].debate = "non-assigned";
+                    ATR.data_history[ATR.total_iter-1].hashtags[current_hashtag].hd_curr = current_hashtag;
+                }
+
+                var flag_to_check = false;
+                if(!(current_hashtag in ATR.hashtag_id_to_check)){
+                    ATR.hashtag_id_to_check[current_hashtag] = {};
+                    ATR.hashtag_id_to_check[current_hashtag].scores = [];
+                    flag_to_check = true;
                 }
                 for(var k in ATR.hashtag_deb_sim_data.HashTags[current_hashtag].scores){
-                    ATR.hashtag_deb_sim_data.HashTags[current_hashtag].scores[k].val = 0.0;
+                    if(flag_to_check){
+                        ATR.hashtag_id_to_check[current_hashtag].scores.push({});
+                        ATR.hashtag_id_to_check[current_hashtag].scores[k].val = ATR.hashtag_deb_sim_data.HashTags[current_hashtag].scores[k].val;
+                    }
                 }
-                ATR.hashtag_deb_sim_data.HashTags[current_hashtag].scores[i].val = sum;
 
                 // assigning hashtag to debate
                 var old_deb = -1;
                 var keys = Object.keys(ATR.disc_features_data);
                 var hashtag = "#"+ATR.hashtag_deb_sim_data.HashTags[current_hashtag].tagStr;
+                var score = 0.0;
+                var prev_deb = "";
+                var flag = false;
                 for(var k in keys){
                     for(var l in ATR.disc_features_data[keys[k]]){
                         if(ATR.disc_features_data[keys[k]][l][hashtag] != undefined){
+                            score = ATR.disc_features_data[keys[k]][l][hashtag];
                             old_deb = keys[k];
+                            if(ATR.disc_features_data[keys[k]][l][hashtag]["prev_deb"])
+                                prev_deb = ATR.disc_features_data[keys[k]][l][hashtag]["prev_deb"];
+                            flag2 = true;
                         }
                     }
                 }
-                console.log(old_deb);
-                ATR.update_discriminative_features(hashtag, ATR.classes_name[i], old_deb);
-                ATR.data_for_similarity_hd = null;
-                ATR.resize(false, null, null, true);
-                ATR.update_labeling_request();
+                if(flag2){
+                    var disc_f = "#"+ATR.hashtag_deb_sim_data.HashTags[current_hashtag].tagStr;
+                    if(!(disc_f in ATR.keyword_id_to_check))
+                        ATR.keyword_id_to_check[disc_f] = old_deb;
+                    ATR.data_history[ATR.total_iter-1].disc_features[disc_f] = {};
+                    ATR.data_history[ATR.total_iter-1].disc_features[disc_f].true_label = old_deb;
+                    ATR.data_history[ATR.total_iter-1].disc_features[disc_f].prev_deb = prev_deb;
+                    ATR.data_history[ATR.total_iter-1].disc_features[disc_f].score = score;
+
+                    ATR.update_discriminative_features(hashtag, ATR.classes_name[i], old_deb);
+                }
+                ATR.update_nav_history();
+                $('#myModal2').unbind('hidden.bs.modal');
+                // cleaning hashtag similarity
+                d3.select(".panel-body.similarity-hd-list").selectAll("span").remove();
+                d3.select("svg.similarity-hd").remove();
+                d3.select(".panel.panel-default.similarity-hd div.panel-heading").select("p").remove();
+                ATR.load_hds(false);
+                if(d3.select("#hide-similarity-hd-panel-button").attr("aria-expanded") == "true"){
+                    ATR.draw_similarity_hd(true, undefined);
+                }
+                ATR.update_vis(false, false);
             }
-            $('#myModal2').unbind('hidden.bs.modal');
-            // for video
-            ATR.labeling_count = ATR.labeling_count + 1;
-            d3.select(".navbar-brand.history").text("HISTORY ("+ATR.labeling_count+")");
-            d3.select(".pagination.list-inline.iter li#iterc a").text(ATR.labeling_count);
-            d3.select(".pagination.list-inline.iter li#iterp").attr("class", "")
-            //load_data(1);
+        }
+
+        function hd_curr_new(){
+            var hd_curr_aux = 0;
+            while(hd_curr_aux+1 < ATR.hashtag_deb_sim_data.HashTags.length){
+                var keys = Object.keys(ATR.hd_visited);
+                var flag = false;
+                for(var j=0; j<keys.length; j++){
+                    if(ATR.hd_visited[keys[j]] == hd_curr_aux){
+                        flag = true;
+                        break;
+                    }
+                }
+                if(flag)
+                    hd_curr_aux = hd_curr_aux + 1;
+                else
+                    break;
+            }
+            ATR.hd_curr = hd_curr_aux;
         }
 
         function dragended(){
@@ -278,6 +396,13 @@ function similarity_hd(bwidth, bheight, current_hashtag){
             debate_nodes.each(function(d,i){
                 var deb_pos = [d3.select(this).attr("x"), d3.select(this).attr("y")]
                 if(hashtag_pos[0] >= deb_pos[0] && hashtag_pos[0] <= Number(deb_pos[0])+rect && hashtag_pos[1] >= deb_pos[1] && hashtag_pos[1] <= Number(deb_pos[1])+rect){
+                    if(!(ATR.hashtag_deb_sim_data.HashTags[ATR.hd_curr].tagStr in ATR.hd_visited)){
+                        // recording values
+                        ATR.recording_values[1] = ATR.recording_values[1] + 1;
+
+                        ATR.hd_visited[ATR.hashtag_deb_sim_data.HashTags[ATR.hd_curr].tagStr] = ATR.hd_curr;
+                        hd_curr_new();
+                    }
                     var input = [ic, i]
                     $('#myModal2').modal()
                     $('#myModal2').modal({ keyboard: false })
@@ -285,50 +410,6 @@ function similarity_hd(bwidth, bheight, current_hashtag){
                     $('#myModal2').on('hidden.bs.modal', function () {
                         assign_hashtags_tweets(input[0], input[1]);
                     })
-
-                    /*// find related debates
-                    var related_debates = []
-                    paths.each(function(d,i){
-                        if(d.source == ic){
-                            related_debates.push(d.target-tweet_nodes[0].length)
-                        }
-                    })
-
-                    // find related tweets
-                    var all_related_tweets = []
-                    for(var k in related_debates){
-                        for(var j in ATR.new_data_similarity_hd[current_hashtag].debates[related_debates[k]].tweets){
-                            all_related_tweets.push([ATR.new_data_similarity_hd[current_hashtag].debates[related_debates[k]].tweets[j].text, ATR.new_data_similarity_hd[current_hashtag].debates[related_debates[k]].tweets[j].id]);
-                        }
-                    }
-
-                    // change association
-                    for(var k in all_related_tweets){
-                        var res = get_tweet_info(Number(all_related_tweets[k][1]));
-                        if(Number(res[0]) != i){
-                            ATR.atrvis_data.dataset[Number(all_related_tweets[k][1])].scores[i].val = res[2] + 0.5;
-                        }
-                    }
-
-                    // change similarities
-                    var sum = 0.0;
-                    for(var k in related_debates){
-                        sum = sum + ATR.new_data_similarity_hd[current_hashtag].debates[related_debates[k]].val;
-                    }
-                    for(var k in ATR.hashtag_deb_sim_data.HashTags[current_hashtag].scores){
-                        ATR.hashtag_deb_sim_data.HashTags[current_hashtag].scores[k].val = 0.0;
-                    }
-                    ATR.hashtag_deb_sim_data.HashTags[current_hashtag].scores[i].val = sum;
-
-                    // update views
-                    // - getting ids
-                    var ids = [];
-                    for(var k in all_related_tweets){
-                        ids.push(ATR.atrvis_data.dataset[all_related_tweets[k][1]].id);
-                    }
-                    ATR.resize(true, ids, i);
-                    var res = ATR.get_data_to_label_informations();
-                    ATR.retrieved_tweets(d3.select("#cl"+(Number(res[0])+1))[0][0], {"classe": res[1]}, Number(res[0]));*/
                 }
             })
             tweet_nodes.each(function(d,i){
@@ -360,7 +441,7 @@ function similarity_hd(bwidth, bheight, current_hashtag){
             }
         }
 
-        mouseclick({"name": ATR.data_for_similarity_hd.nodes[0].name, "type": ATR.data_for_similarity_hd.nodes[0].type}, 0)
+        mouseclick({"name": ATR.data_for_similarity_hd.nodes[0].name, "type": ATR.data_for_similarity_hd.nodes[0].type}, 0);
         function mouseclick(d,i){
             // show paths
             ic = i
@@ -435,9 +516,9 @@ function similarity_hd(bwidth, bheight, current_hashtag){
                                 ATR.labeling_request_rc_flag = false;
                                 ATR.data_for_bundle = null;
                                 ATR.data_for_force_layout = null;
-                                ATR.change_labeling_request(Number(d3.select(this).attr("d")));
+                                ATR.change_labeling_request(Number(d3.select(this).attr("d")), "HashTag");
                             })
-                            .append("p").attr("class", "list-group-item-text").text(shuffled_examples[j][0])
+                            .append("p").attr("class", "list-group-item-text").html(shuffled_examples[j][0])
                             .style({
                                 "font-size": "16px",
                                 "font-weight": "normal",
@@ -525,9 +606,9 @@ function similarity_hd(bwidth, bheight, current_hashtag){
                         ATR.labeling_request_rc_flag = false;
                         ATR.data_for_bundle = null;
                         ATR.data_for_force_layout = null;
-                        ATR.change_labeling_request(Number(d3.select(this).attr("d")));
+                        ATR.change_labeling_request(Number(d3.select(this).attr("d")), "HashTag");
                     })
-                    .append("p").attr("class", "list-group-item-text").text(ATR.atrvis_data.dataset[ATR.new_data_similarity_hd[current_hashtag].debates[Number(d.debate_number)].tweets[j].id].text)
+                    .append("p").attr("class", "list-group-item-text").html(ATR.atrvis_data.dataset[ATR.new_data_similarity_hd[current_hashtag].debates[Number(d.debate_number)].tweets[j].id].text)
                     .style({
                         "font-size": "16px",
                         "font-weight": "normal",
@@ -582,11 +663,9 @@ function similarity_hd(bwidth, bheight, current_hashtag){
 
         function mouseout(d) {
             if(d.type == "hashtag"){
-                //tip_tweets.hide();
                 d3.select(this).style("fill", "black")
             }
             else{
-                //tip_debates.hide();
                 d3.select(this).attr("stroke", "white");
                 d3.select(this).attr("stroke-width", "1.5px");
             }

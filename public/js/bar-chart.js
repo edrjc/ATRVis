@@ -6,8 +6,6 @@ function draw_bar_chart(bwidth, bheight, data_for_chart){
         width = bwidth - margin.left - margin.right,
         height = bheight - margin.top - margin.bottom;
 
-    //var formatPercent = d3.format(".0%");
-
     var x = d3.scale.ordinal()
         .rangeRoundBands([20, width-20], .1);
 
@@ -23,7 +21,6 @@ function draw_bar_chart(bwidth, bheight, data_for_chart){
     var yAxis = d3.svg.axis()
         .scale(y)
         .orient("left");
-        //.tickFormat(formatPercent);
 
     var svg = d3.select(".panel-body.chart").append("svg").attr("class", "bar-chart").attr("id", "svg1")
         .attr("width", width + margin.left + margin.right)

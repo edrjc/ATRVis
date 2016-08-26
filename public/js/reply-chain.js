@@ -20,7 +20,12 @@ function reply_chain(bwidth, bheight){
             .separation(function(a, b) { return (a.parent == b.parent ? 1 : 2) / a.depth; });
 
         var diagonal = d3.svg.diagonal.radial()
-            .projection(function(d) { return [d.y, d.x / 180 * Math.PI]; });
+            .projection(function(d) {
+                if(!(isNaN(d.x / 180 * Math.PI)))
+                    return [d.y, d.x / 180 * Math.PI];
+                else
+                    return [d.y, 0];
+            });
 
         var svg = d3.select(".panel-body.reply-chain").append("svg")
             .attr("class", "reply-chain")
@@ -44,7 +49,12 @@ function reply_chain(bwidth, bheight){
             .data(nodes)
             .enter().append("g")
                 .attr("class", "node-reply-chain")
-                .attr("transform", function(d) { return "rotate(" + (d.x - 90) + ")translate(" + d.y + ")"; })
+                .attr("transform", function(d) {
+                    if(!(isNaN(d.x)))
+                        return "rotate(" + (d.x - 90) + ")translate(" + d.y + ")";
+                    else
+                        return "rotate(" + (0 - 90) + ")translate(" + d.y + ")";
+                })
 
         node.append("circle")
             .attr("r", r)
@@ -77,7 +87,7 @@ function reply_chain(bwidth, bheight){
                         ATR.labeling_request_rc_flag = true;
                         ATR.data_for_bundle = null;
                         ATR.data_for_force_layout = null;
-                        ATR.change_labeling_request(Number(i));
+                        ATR.change_labeling_request(Number(i), "Reply Chain");
                     }
                 }
             })
@@ -86,7 +96,7 @@ function reply_chain(bwidth, bheight){
 
         function update_reply_chain_number(qtd){
             // cleaning number
-            d3.select(".panel.panel-default.reply-chain div.panel-heading p").remove();
+            d3.selectAll(".panel.panel-default.reply-chain div.panel-heading p").remove();
             // showing number of classes
             d3.select(".panel.panel-default.reply-chain div.panel-heading").append("p")
                 .attr("class", "tweets-number")
@@ -98,6 +108,16 @@ function reply_chain(bwidth, bheight){
                     "text-shadow": "-1px 0 black, 0 1px black, 1px 0 black, 0 -1px black"
                 })
                 .text(qtd+" TWEETS");
+            d3.select(".panel.panel-default.reply-chain div.panel-heading").append("p")
+                .attr("class", "rc-number")
+                .style({
+                    "text-align": "center",
+                    "font-size": "1em",
+                    "font-weight": "300",
+                    "color": "white",
+                    "text-shadow": "-1px 0 black, 0 1px black, 1px 0 black, 0 -1px black"
+                })
+                .text((ATR.rc_curr+1)+" of "+ATR.list_of_rc.length);
         }
 
         function mouseover(d){

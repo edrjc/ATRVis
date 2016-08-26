@@ -57,7 +57,6 @@ function bundle(bwidth, bheight, classes_name, classes_color, max_val_threshold)
 		svg.append("path")
 		    .attr("class", "arc")
 		    .attr("d", d3.svg.arc().outerRadius(ry - magic_value).innerRadius(0).startAngle(0).endAngle(2 * Math.PI))
-		    //.on("mousedown", mousedown);
 
 		var nodes = cluster.nodes(packages.root(ATR.data_for_bundle)),
 			links = packages.imports(nodes),
@@ -121,12 +120,6 @@ function bundle(bwidth, bheight, classes_name, classes_color, max_val_threshold)
 					.attr("dx", function(d) { return d.x < 180 ? 28 : -28; })
 					.attr("dy", ".31em")
 					.attr("r", function(d){
-						/*var res = get_most_probable_debate(d.twitter);
-						if(res[0] == classes_color[d.name.split(".")[1]] || d.twitter.status == "non-retrieved"){
-							return r;
-						}else{
-							return r+1;
-						}*/
 						return r;
 					})
 					.attr("stroke", function(d, i){
@@ -149,13 +142,6 @@ function bundle(bwidth, bheight, classes_name, classes_color, max_val_threshold)
 						}else{
 							return ATR.colorScale(classes_color[d.twitter.true_label]);
 						}
-
-			        	/*if(classes_color[d.name.split(".")[1]] != -1){
-			        			return ATR.colorScale(classes_color[d.name.split(".")[1]])
-			        		}else{
-			        			return ATR.color4;
-			        		}*/
-			        	//}
 		        	})
 
 		d3.select(".form-control.bundle-tension").on("change", function() {
@@ -367,7 +353,7 @@ function bundle(bwidth, bheight, classes_name, classes_color, max_val_threshold)
 				if(ATR.data_for_vis_queue_hash[keys[i]] == Number(d.key.split("Tweet")[1]))
 					idx = Number(keys[i]);
 			}
-			ATR.change_labeling_request(idx);
+			ATR.change_labeling_request(idx, "ring_visualization");
 		}
 
 		function_fe_bundle = function(){
@@ -423,8 +409,6 @@ function bundle(bwidth, bheight, classes_name, classes_color, max_val_threshold)
 				d3.select(el).style("opacity", 0.3);
 				d3.select(el).attr("count", 0);
 				d3.select(el.parentNode).attr("count", 0);
-		    	/*d3.select(this).attr("stroke", "white");
-				d3.select(this).attr("stroke-width", "1.5px");*/
 				clean_path(el, d, true);
 				d3.select(el.parentNode).attr("manualy_selected", false);
 				d3.select(el).attr("manualy_selected", false);
